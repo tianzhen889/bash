@@ -18,8 +18,19 @@ sudo systemctl start docker
 # 将Docker添加到系统启动项中
 sudo systemctl enable docker
 
-# 输出安装完成的消息
-echo "Docker安装完成！"
+# 配置Docker镜像加速器
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://5v3s2pgt.mirror.aliyuncs.com"]
+}
+EOF
 
-# 验证Docker安装
-sudo docker run hello-world
+# 重新加载Docker守护进程配置
+sudo systemctl daemon-reload
+
+# 重启Docker服务使配置生效
+sudo systemctl restart docker
+
+# 输出安装完成的消息
+echo "Docker安装完成，并已配置镜像加速器！"
